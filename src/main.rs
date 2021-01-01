@@ -1,3 +1,4 @@
+use std::io::Read;
 use crate::string_seek::shrinkwrap;
 use crate::string_seek::get_region_text;
 use defaultmap::DefaultBTreeMap;
@@ -40,12 +41,9 @@ impl OpenRegion {
 }
 
 fn main() -> Result<(), Box<dyn Error>>{
-    // switch these to std::in and std::out
-    let path_in = Path::new("cozal-llvm.json");
-    let path_out = Path::new("cozal-codecov.json");
-
-    let in_string = std::fs::read_to_string(path_in)?;
-    let in_str = in_string.as_str();
+    let mut in_buf = String::new();
+    std::io::stdin().read_to_string(&mut in_buf)?;
+    let in_str = in_buf.as_str();
 
     let llvm_cov: llvm::LLVMCov = serde_json::from_str(in_str)?;
     let mut codecov = codecov::CodeCov::new();
@@ -90,7 +88,7 @@ fn main() -> Result<(), Box<dyn Error>>{
         codecov.coverage.insert(file.filename, line_coverage.into());
     }
 
-    let writer = std::fs::File::create(path_out)?;
+    let writer = std::io::stdout();
     serde_json::to_writer_pretty(writer, &codecov)?;
 
     Ok(())
