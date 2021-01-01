@@ -1,5 +1,5 @@
 [package]
-name = "llvm-codecov-converter"
+name = "cargo-llvm-codecov-converter"
 version = "0.1.0"
 authors = ["Mason Boeman <masonboeman@gmail.com>"]
 edition = "2018"
