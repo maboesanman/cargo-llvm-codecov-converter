@@ -73,7 +73,11 @@ fn main() -> Result<(), Box<dyn Error>>{
             Ok(file_content) => {
                 region_list = get_region_text(region_list, &file_content).into_iter().map(|(r, s)| shrinkwrap(r, s)).collect()
             },
-            Err(_) => {},
+            Err(e) => {
+                let file_path = file_path.to_string_lossy();
+                let current_dir = std::env::current_dir().unwrap().to_string_lossy().to_string();
+                panic!("Error reading file \"{}\": {}. current working directory is \"{}\"", file_path , e, current_dir)
+            },
         };
 
         for region in region_list {
