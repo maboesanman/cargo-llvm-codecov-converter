@@ -1,6 +1,6 @@
-use substring::Substring;
 use crate::Region;
 use core::cmp::Ordering;
+use substring::Substring;
 
 #[derive(Clone, Debug)]
 struct StrPos {
@@ -13,7 +13,7 @@ impl Ord for StrPos {
     fn cmp(&self, other: &Self) -> Ordering {
         match self.line.cmp(&other.line) {
             Ordering::Equal => self.col.cmp(&other.col),
-            ord => ord
+            ord => ord,
         }
     }
 }
@@ -68,7 +68,7 @@ fn find_all(string: &str, positions: &mut [StrPos]) {
                     next_pos_index += 1;
                     continue;
                 }
-            },
+            }
             None => break,
         }
         match chars.next() {
@@ -98,7 +98,7 @@ pub fn get_region_text(regions: Vec<Region>, file_content: &str) -> Vec<(Region,
         let start_pos = positions.binary_search(&start_pos).unwrap();
         let start_pos = positions.get(start_pos).unwrap();
         let start_pos = start_pos.pos.unwrap();
-        
+
         let end_pos = StrPos::new(region.end.0, region.end.1);
         let end_pos = positions.binary_search(&end_pos).unwrap();
         let end_pos = positions.get(end_pos).unwrap();
@@ -111,7 +111,7 @@ pub fn get_region_text(regions: Vec<Region>, file_content: &str) -> Vec<(Region,
     output
 }
 
-pub fn shrinkwrap(region: Region, region_str: &str) -> Region{
+pub fn shrinkwrap(region: Region, region_str: &str) -> Region {
     // all set to start.
     let (mut start_line, mut start_col) = region.start;
     let (mut end_line, mut end_col) = region.start;
@@ -129,7 +129,7 @@ pub fn shrinkwrap(region: Region, region_str: &str) -> Region{
                     start_col += 1;
                 }
             }
-            
+
             if c == '\n' {
                 end_line_running += 1;
                 end_col_running = 1;

@@ -1,6 +1,6 @@
+use serde::{Serialize, Serializer};
 use std::collections::BTreeMap;
 use std::collections::HashMap;
-use serde::{Serialize, Serializer};
 
 #[derive(Serialize)]
 pub struct CodeCov<'a> {
@@ -18,7 +18,9 @@ pub struct CodeCovLineHit {
 }
 
 impl Default for CodeCovLineCoverage {
-    fn default() -> Self { Self(Vec::default()) }
+    fn default() -> Self {
+        Self(Vec::default())
+    }
 }
 
 impl CodeCovLineCoverage {
@@ -30,7 +32,7 @@ impl CodeCovLineCoverage {
 impl<'a> CodeCov<'a> {
     pub fn new() -> Self {
         Self {
-            coverage: HashMap::new()
+            coverage: HashMap::new(),
         }
     }
 }

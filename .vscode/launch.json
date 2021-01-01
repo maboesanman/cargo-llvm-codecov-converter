@@ -7,15 +7,15 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug executable 'llvm-codecov-converter'",
+            "name": "Debug executable 'cargo-llvm-codecov-converter'",
             "cargo": {
                 "args": [
                     "build",
-                    "--bin=llvm-codecov-converter",
-                    "--package=llvm-codecov-converter"
+                    "--bin=cargo-llvm-codecov-converter",
+                    "--package=cargo-llvm-codecov-converter"
                 ],
                 "filter": {
-                    "name": "llvm-codecov-converter",
+                    "name": "cargo-llvm-codecov-converter",
                     "kind": "bin"
                 }
             },
@@ -25,16 +25,16 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug unit tests in executable 'llvm-codecov-converter'",
+            "name": "Debug unit tests in executable 'cargo-llvm-codecov-converter'",
             "cargo": {
                 "args": [
                     "test",
                     "--no-run",
-                    "--bin=llvm-codecov-converter",
-                    "--package=llvm-codecov-converter"
+                    "--bin=cargo-llvm-codecov-converter",
+                    "--package=cargo-llvm-codecov-converter"
                 ],
                 "filter": {
-                    "name": "llvm-codecov-converter",
+                    "name": "cargo-llvm-codecov-converter",
                     "kind": "bin"
                 }
             },

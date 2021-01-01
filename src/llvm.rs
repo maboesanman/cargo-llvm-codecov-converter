@@ -12,7 +12,7 @@ pub struct LLVMCov<'a> {
 #[derive(Deserialize)]
 pub struct LLVMCovDatum<'a> {
     #[serde(borrow)]
-    pub files: Vec<LLVMCovFile<'a>>
+    pub files: Vec<LLVMCovFile<'a>>,
 }
 
 #[derive(Deserialize)]
@@ -38,14 +38,7 @@ struct RawSegment(usize, usize, u64, bool, bool, bool);
 
 impl std::convert::From<RawSegment> for LLVMCovSegment {
     fn from(raw: RawSegment) -> Self {
-        let RawSegment(
-            line,
-            col,
-            count,
-            has_count,
-            is_region_entry,
-            is_gap_region
-        ) = raw;
+        let RawSegment(line, col, count, has_count, is_region_entry, is_gap_region) = raw;
 
         Self {
             line,
