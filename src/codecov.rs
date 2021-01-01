@@ -45,13 +45,14 @@ impl Serialize for CodeCovLineCoverage {
         if hits.len() == 0 {
             serializer.serialize_none()
         } else {
-            let branches_hit = hits.iter().filter(|hit| hit.count > 0).count();
-            let branches = hits.len();
-            let hits = hits.iter().map(|hit| hit.count).max().unwrap();
-            if branches_hit == 0 || branches_hit == branches {
-                serializer.serialize_u64(hits as u64)
+            let regions_hit = hits.iter().filter(|hit| hit.count > 0).count();
+            let regions = hits.len();
+
+            if regions_hit == 0 || regions_hit == regions {
+                let hits = hits.iter().map(|hit| hit.count).max().unwrap();
+                serializer.serialize_u64(hits)
             } else {
-                serializer.serialize_str(&format!("{}/{}", branches_hit, branches))
+                serializer.serialize_str(&format!("{}/{}", regions_hit, regions))
             }
         }
     }

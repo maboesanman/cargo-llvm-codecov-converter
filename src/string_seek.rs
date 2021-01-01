@@ -9,8 +9,6 @@ struct StrPos {
     pos: Option<usize>,
 }
 
-
-
 impl Ord for StrPos {
     fn cmp(&self, other: &Self) -> Ordering {
         match self.line.cmp(&other.line) {
@@ -47,9 +45,6 @@ impl StrPos {
         self.pos = Some(next.0 + 1);
         if next.1 == '\n' {
             self.line += 1;
-            if self.line == 64 {
-                println!("{}", 64);
-            }
             self.col = 1;
         } else {
             self.col += 1;
@@ -114,4 +109,48 @@ pub fn get_region_text(regions: Vec<Region>, file_content: &str) -> Vec<(Region,
     }
 
     output
+}
+
+pub fn shrinkwrap(region: Region, region_str: &str) -> Region{
+    // all set to start.
+    let (mut start_line, mut start_col) = region.start;
+    let (mut end_line, mut end_col) = region.start;
+    let (mut end_line_running, mut end_col_running) = region.start;
+
+    let mut have_seen_non_whitespace = false;
+
+    for c in region_str.chars() {
+        if c.is_whitespace() {
+            if !have_seen_non_whitespace {
+                if c == '\n' {
+                    start_line += 1;
+                    start_col = 1;
+                } else {
+                    start_col += 1;
+                }
+            }
+            
+            if c == '\n' {
+                end_line_running += 1;
+                end_col_running = 1;
+            } else {
+                end_col_running += 1;
+            }
+        } else {
+            have_seen_non_whitespace = true;
+            end_col_running += 1;
+
+            end_line = end_line_running;
+            end_col = end_col_running;
+        }
+    }
+
+    Region {
+        id: region.id,
+        start: (start_line, start_col),
+        end: (end_line, end_col),
+        count: region.count,
+        has_count: region.has_count,
+        is_gap: region.is_gap,
+    }
 }

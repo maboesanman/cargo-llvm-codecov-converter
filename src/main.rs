@@ -1,7 +1,6 @@
+use crate::string_seek::shrinkwrap;
 use crate::string_seek::get_region_text;
-use std::collections::VecDeque;
 use defaultmap::DefaultBTreeMap;
-use std::convert::TryInto;
 use std::error::Error;
 use std::path::Path;
 
@@ -9,6 +8,7 @@ mod llvm;
 mod codecov;
 mod string_seek;
 
+#[derive(Clone)]
 pub struct Region {
     id: usize,
     start: (usize, usize),
@@ -44,10 +44,10 @@ fn main() -> Result<(), Box<dyn Error>>{
     let path_in = Path::new("cozal-llvm.json");
     let path_out = Path::new("cozal-codecov.json");
 
-    let inString = std::fs::read_to_string(path_in)?;
-    let inStr = inString.as_str();
+    let in_string = std::fs::read_to_string(path_in)?;
+    let in_str = in_string.as_str();
 
-    let llvm_cov: llvm::LLVMCov = serde_json::from_str(inStr)?;
+    let llvm_cov: llvm::LLVMCov = serde_json::from_str(in_str)?;
     let mut codecov = codecov::CodeCov::new();
 
 
@@ -73,11 +73,9 @@ fn main() -> Result<(), Box<dyn Error>>{
 
         let file_str = std::fs::read_to_string(file_path)?;
 
-        for (region, region_str) in get_region_text(region_list, &file_str).into_iter() {
-            println!("[{}]>>>{}<<<", region.count, region_str);
-            println!("------------------------------------------------");
-            let range = region.start.0 .. region.end.0 + 1;
-            if region.has_count {
+        for region in get_region_text(region_list, &file_str).into_iter().map(|(r, s)| shrinkwrap(r, s)) {
+            if region.has_count && !region.is_gap {
+                let range = region.start.0 .. region.end.0 + 1;
                 for line_num in range {
                     let hit = codecov::CodeCovLineHit {
                         start_col: if line_num == region.start.0 { Some(region.start.1) } else { None },
@@ -119,8 +117,4 @@ fn handle_segment(stack: &mut Vec<OpenRegion>, segment: &llvm::LLVMCovSegment, n
     }
 
     new_region
-}
-
-fn shrinkwrap(region: &mut Region, region_str: &str) {
-    
 }
