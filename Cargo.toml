@@ -1,8 +1,12 @@
 [package]
 name = "cargo-llvm-codecov-converter"
+descriptiion = "conversion utility from llvm-cov format to codecov format"
+license = "MIT"
+licence-file = "LICENCE"
 version = "0.1.0"
 authors = ["Mason Boeman <masonboeman@gmail.com>"]
 edition = "2018"
+repository = "https://github.com/maboesanman/cargo-llvm-codecov-converter"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
