@@ -1,6 +1,6 @@
 [package]
 name = "cargo-llvm-codecov-converter"
-descriptiion = "conversion utility from llvm-cov format to codecov format"
+description = "conversion utility from llvm-cov format to codecov format"
 license = "MIT"
 licence-file = "LICENCE"
 version = "0.1.0"
