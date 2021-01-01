@@ -69,9 +69,14 @@ fn main() -> Result<(), Box<dyn Error>>{
 
         let file_path = Path::new(file.filename);
 
-        let file_str = std::fs::read_to_string(file_path)?;
+        match std::fs::read_to_string(file_path) {
+            Ok(file_content) => {
+                region_list = get_region_text(region_list, &file_content).into_iter().map(|(r, s)| shrinkwrap(r, s)).collect()
+            },
+            Err(_) => {},
+        };
 
-        for region in get_region_text(region_list, &file_str).into_iter().map(|(r, s)| shrinkwrap(r, s)) {
+        for region in region_list {
             if region.has_count && !region.is_gap {
                 let range = region.start.0 .. region.end.0 + 1;
                 for line_num in range {
